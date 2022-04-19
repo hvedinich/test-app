@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -16,15 +16,15 @@ import {
   NumberDecrementStepper,
 } from "@chakra-ui/react";
 
-const BookingTimeSelector = ({ isOpen, options = [], onClose, onComplete }) => {
-  const [data, setData] = useState({ guestsCount: 2 });
-
-  const setTime = (e) =>
-    setData((state) => ({ ...state, timeSlot: e.target.value }));
-
-  const setGuests = (_, guestsCount) =>
-    setData((state) => ({ ...state, guestsCount }));
-
+const BookingTimeSelector = ({
+  isOpen,
+  options = [],
+  onClose,
+  onComplete,
+  setTime,
+  setGuests,
+  data,
+}) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />

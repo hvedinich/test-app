@@ -5,9 +5,12 @@ import { Box, Heading, useToast } from "@chakra-ui/react";
 import Table from "../../components/Table";
 import BookingTimeSelector from "../../components/BookingTimeSelector";
 
+const defaultBookingData = { guestsCount: 2 };
+
 const Booking = () => {
   const [selectedTable, setSelectedTable] = useState();
   const toast = useToast();
+  const [bookingData, setBookingData] = useState(defaultBookingData);
 
   const { data, refetch } = useTablesQuery();
   const { mutate } = useBookingMutation({
@@ -25,7 +28,10 @@ const Booking = () => {
   const selectTable = (id) => {
     setSelectedTable(data.find((e) => e.id === id));
   };
-  const onClose = () => setSelectedTable();
+  const onClose = () => {
+    setBookingData(defaultBookingData);
+    setSelectedTable();
+  };
 
   const chooseTime = ({ timeSlot, guestsCount }) => {
     mutate({
@@ -36,7 +42,14 @@ const Booking = () => {
       date: 1650229200000,
     });
     setSelectedTable();
+    setBookingData(defaultBookingData);
   };
+
+  const setTime = (e) =>
+    setBookingData((state) => ({ ...state, timeSlot: e.target.value }));
+
+  const setGuests = (_, guestsCount) =>
+    setBookingData((state) => ({ ...state, guestsCount }));
 
   return (
     <Box p={10}>
@@ -60,6 +73,9 @@ const Booking = () => {
         options={selectedTable?.availableSlots}
         onClose={onClose}
         onComplete={chooseTime}
+        setTime={setTime}
+        setGuests={setGuests}
+        data={bookingData}
       />
     </Box>
   );
